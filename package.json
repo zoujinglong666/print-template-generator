@@ -1,0 +1,27 @@
+{
+  "name": "print-template-editor",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc --noEmit && vite build",
+    "typecheck": "vue-tsc --noEmit",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@sv-print/hiprint": "^0.3.43",
+    "@sv-print/vue3": "^0.2.4",
+    "element-plus": "^2.9.1",
+    "jsbarcode": "^3.12.3",
+    "print-canvas-designer": "^1.0.0",
+    "qrcode": "^1.5.4",
+    "vue": "^3.5.13"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.2.1",
+    "typescript": "~5.7.2",
+    "vite": "^6.0.5",
+    "vue-tsc": "^2.2.12"
+  }
+}

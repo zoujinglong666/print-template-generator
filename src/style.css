@@ -1,0 +1,20 @@
+* { box-sizing: border-box; }
+html, body, #app { height: 100%; margin: 0; }
+body {
+  font-family: 'Helvetica Neue', Arial, 'Microsoft YaHei', sans-serif;
+  color: #303133;
+  background: #f0f2f5;
+  overflow: hidden;
+}
+
+/* 修复按钮白字无背景的 bug：
+ * print-canvas-designer/style.css 内嵌 Tailwind Preflight 规则
+ * `button, [type="button"] { background-color: transparent }`，特异性 (0,1,1)
+ * 高于 element-plus 的 `.el-button` (0,1,0)，导致实心按钮背景丢失、文字与页面同色；
+ * 悬浮时 `.el-button:hover` (0,2,0) 恢复背景才可见。
+ * 此处用 `button.el-button`（同为 (0,1,1)，且本文件最后加载、源顺序获胜）恢复背景；
+ * hover/active/disabled/pl 等状态规则特异性 ≥(0,2,0)，不受影响。 */
+button.el-button,
+a.el-button {
+  background-color: var(--el-button-bg-color);
+}

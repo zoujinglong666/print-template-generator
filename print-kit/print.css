@@ -1,0 +1,107 @@
+/* ============================================================
+ * 共享打印样式（唯一样式源）
+ * 屏幕预览 与 iframe 打印 共用本文件：
+ *   - 组件里 `import '@/assets/styles/print.css'` 让屏幕所见即所得
+ *   - usePrint 里以 `?raw` 内联进 iframe，保证打印一致
+ * 所有规则命名空间在 .print-doc 下，避免污染全局。
+ * ============================================================ */
+
+.print-doc {
+  font-family: "Microsoft YaHei", "SimSun", "Segoe UI", sans-serif;
+  font-size: 14px;
+  line-height: 1.4;
+  color: #000;
+}
+.print-doc .header h1 {
+  text-align: center;
+  font-size: 22px;
+  margin: 0 0 20px 0;
+  font-weight: bold;
+  color: #000;
+}
+.print-doc .info-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4px;
+  margin-bottom: 20px;
+}
+.print-doc .info-item {
+  display: flex;
+  gap: 4px;
+  align-items: flex-start;
+}
+.print-doc .info-item span:first-child {
+  font-weight: bold;
+  color: #333;
+  white-space: nowrap;
+}
+.print-doc .info-item span:last-child {
+  flex: 1;
+  word-break: break-word;
+}
+.print-doc .outable-container {
+  width: 100%;
+}
+.print-doc .data-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+.print-doc .data-table th,
+.print-doc .data-table td {
+  border: 1px solid #ccc;
+  padding: 6px 8px;
+  vertical-align: top;
+  word-break: break-word;
+  text-align: left;
+  font-size: 13px;
+}
+.print-doc .data-table th {
+  background-color: #f8f9fa;
+  font-weight: bold;
+}
+.print-doc .product-img {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  display: block;
+}
+.print-doc .third-party-item {
+  margin-bottom: 8px;
+  font-size: 12px;
+}
+
+/* 堆叠/列表单元格内的行距与字号（scoped 样式进不了 iframe，必须放这里） */
+.print-doc .data-table td p {
+  margin: 2px 0;
+}
+.print-doc .line-small {
+  font-size: 12px;
+}
+
+/* 多份打印：由份数复制出的 .print-page 之间强制分页 */
+.print-page {
+  width: 100%;
+}
+.print-page + .print-page {
+  page-break-before: always;
+}
+
+@media print {
+  @page {
+    size: A4;
+    margin: 10mm;
+  }
+  .print-doc .info-grid {
+    page-break-inside: avoid;
+  }
+  .print-doc .data-table {
+    page-break-inside: auto;
+  }
+  .print-doc .data-table thead {
+    display: table-header-group; /* 跨页重复表头 */
+  }
+  .print-doc .data-table tr {
+    page-break-inside: avoid;
+  }
+}

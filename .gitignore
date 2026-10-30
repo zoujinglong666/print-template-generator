@@ -1,0 +1,26 @@
+node_modules
+dist
+dist-ssr
+*.local
+
+# 本地调试 / 测试产物
+.playwright-cli
+*.log
+
+# 浏览器调试快照 / 临时脚本（根目录残留）
+grid.yaml
+home.yaml
+s1.yaml
+tmp/
+toolbar-fixed.png
+
+# 编辑器 / 系统
+.DS_Store
+.idea
+.vscode/*
+!.vscode/extensions.json
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?

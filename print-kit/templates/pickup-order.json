@@ -1,0 +1,163 @@
+{
+  "name": { "zh": "拣货单", "en": "Pickup Order" },
+  "page": { "margin": "10mm" },
+  "title": { "field": "linkOrderCode" },
+  "info": {
+    "columns": 3,
+    "items": [
+      { "label": { "zh": "出库仓库：", "en": "From Warehouse: " }, "field": "warehouseName" },
+      { "label": { "zh": "目的仓：", "en": "To Warehouse:" }, "field": "destWarehouseName" },
+      { "label": { "zh": "出库类型：", "en": "Order Type:" }, "field": "outStoreTypeDesc" },
+      { "label": { "zh": "运输方式：", "en": "Shipping Mode:" }, "field": "transportModeName" },
+      { "label": { "zh": "物流商：", "en": "Carrier:" }, "field": "logisticsProviderName" },
+      { "label": { "zh": "物流渠道：", "en": "Logistics Channel:" }, "field": "logisticsChannelName" },
+      { "label": { "zh": "出库单号：", "en": "Outbound Order No: " }, "field": "outStoreOrderCode" },
+      {
+        "label": { "zh": "货件单号：", "en": "Shipment No: " },
+        "field": "shipmentNumber",
+        "fallback": "-",
+        "visibleWhen": { "isShipment": true }
+      },
+      {
+        "label": { "zh": "打印时间：", "en": "Print Time:" },
+        "field": "printTime",
+        "fallback": "-",
+        "visibleWhen": { "isShipment": true }
+      },
+      {
+        "label": { "zh": "货件创建人：", "en": "Shipment Creator:" },
+        "field": "linkOrderCreateName",
+        "fallback": "-",
+        "visibleWhen": { "isShipment": true }
+      },
+      {
+        "label": { "zh": "运营贴标要求：", "en": "Labeling Requirement:" },
+        "field": "operationLabelRequirement",
+        "join": ", ",
+        "fallback": "-"
+      },
+      {
+        "label": { "zh": "是否贴货代标签：", "en": "Freight Forwarder Label:" },
+        "field": "logisticsLabelChange",
+        "boolean": { "yes": { "zh": "是", "en": "Yes" } },
+        "fallback": "-"
+      },
+      { "label": { "zh": "备注：", "en": "Note:" }, "field": "remark" }
+    ]
+  },
+  "table": {
+    "srcField": "productDetails",
+    "variants": [
+      {
+        "when": { "printMode": "batch", "isShipment": false },
+        "comment": "备货单批打印：不拆分 店铺/MSKU/平台仓条码/ASIN",
+        "columns": [
+          { "key": "serialNo", "label": { "zh": "序号", "en": "No." }, "width": "4%", "cell": { "kind": "serial" } },
+          { "key": "image", "label": { "zh": "图片", "en": "Image" }, "width": "13%", "cell": { "kind": "image", "field": "imageUrl" } },
+          {
+            "key": "nameSku",
+            "label": { "zh": "品名/SKU", "en": "Name/SKU" },
+            "width": "22%",
+            "cell": { "kind": "stack", "lines": [ { "field": "productSkuName" }, { "field": "productSkuCode", "small": true } ] }
+          },
+          {
+            "key": "storeFnSku",
+            "label": { "zh": "店铺/FNSKU", "en": "Store/FNSKU" },
+            "width": "10%",
+            "cell": { "kind": "stack", "lines": [ { "field": "shopName" }, { "field": "fnsku" }, { "field": "msku" } ] }
+          },
+          {
+            "key": "productInfo",
+            "label": { "zh": "第三方仓产品信息", "en": "Product Info" },
+            "width": "22%",
+            "cell": {
+              "kind": "list",
+              "listField": "skuItemList",
+              "lines": [
+                { "label": { "zh": "三方仓SKU:", "en": "Third-party SKU:" }, "field": "thirdSkuCode" },
+                { "label": { "zh": "三方仓品名:", "en": "Third-party Name:" }, "field": "thirdSkuName" },
+                { "label": { "zh": "三方仓ID:", "en": "Third-party ID:" }, "field": "thirdSkuId" }
+              ]
+            }
+          },
+          { "key": "qtyOut", "label": { "zh": "出库数量", "en": "Qty Out" }, "width": "8%", "cell": { "kind": "text", "field": "outStockQty" } },
+          { "key": "packedQty", "label": { "zh": "装箱数量", "en": "Packed Qty" }, "width": "7%", "cell": { "kind": "text", "field": "packingQuantity" } },
+          {
+            "key": "outboundLocation",
+            "label": { "zh": "出库仓位（数量）", "en": "Outbound Location (Qty)" },
+            "width": "14%",
+            "cell": { "kind": "list", "listField": "goodWarehousePositions", "lines": [ { "text": "{warehousePositionName} ({qty})" } ] }
+          }
+        ]
+      },
+      {
+        "when": { "printMode": "batch" },
+        "comment": "发货单批打印：拆分 店铺/MSKU/平台仓条码/ASIN",
+        "columns": [
+          { "key": "serialNo", "label": { "zh": "序号", "en": "No." }, "width": "4%", "cell": { "kind": "serial" } },
+          { "key": "image", "label": { "zh": "图片", "en": "Image" }, "width": "12%", "cell": { "kind": "image", "field": "imageUrl" } },
+          {
+            "key": "nameSku",
+            "label": { "zh": "品名/SKU", "en": "Name/SKU" },
+            "width": "18%",
+            "cell": { "kind": "stack", "lines": [ { "field": "productSkuName" }, { "field": "productSkuCode", "small": true } ] }
+          },
+          { "key": "shopName", "label": { "zh": "店铺", "en": "Shop" }, "width": "8%", "cell": { "kind": "text", "field": "shopName" } },
+          { "key": "msku", "label": { "zh": "MSKU", "en": "MSKU" }, "width": "8%", "cell": { "kind": "text", "field": "msku" } },
+          { "key": "platformBarcode", "label": { "zh": "平台仓条码", "en": "Platform Barcode" }, "width": "10%", "cell": { "kind": "text", "field": "fnsku" } },
+          { "key": "asin", "label": { "zh": "ASIN", "en": "ASIN" }, "width": "12%", "cell": { "kind": "text", "field": "asin" } },
+          { "key": "qtyOut", "label": { "zh": "出库数量", "en": "Qty Out" }, "width": "6%", "cell": { "kind": "text", "field": "outStockQty" } },
+          { "key": "packedQty", "label": { "zh": "装箱数量", "en": "Packed Qty" }, "width": "6%", "cell": { "kind": "text", "field": "packingQuantity" } },
+          {
+            "key": "outboundLocation",
+            "label": { "zh": "出库仓位（数量）", "en": "Outbound Location (Qty)" },
+            "width": "16%",
+            "cell": { "kind": "list", "listField": "goodWarehousePositions", "lines": [ { "text": "{warehousePositionName} ({qty})" } ] }
+          }
+        ]
+      },
+      {
+        "when": null,
+        "comment": "默认（单选打印）",
+        "columns": [
+          { "key": "serialNo", "label": { "zh": "序号", "en": "No." }, "width": "4%", "cell": { "kind": "serial" } },
+          { "key": "image", "label": { "zh": "图片", "en": "Image" }, "width": "13%", "cell": { "kind": "image", "field": "imageUrl" } },
+          {
+            "key": "nameSku",
+            "label": { "zh": "品名/SKU", "en": "Name/SKU" },
+            "width": "22%",
+            "cell": { "kind": "stack", "lines": [ { "field": "productSkuName" }, { "field": "productSkuCode", "small": true } ] }
+          },
+          {
+            "key": "storeFnSku",
+            "label": { "zh": "店铺/FNSKU", "en": "Store/FNSKU" },
+            "width": "10%",
+            "cell": { "kind": "stack", "lines": [ { "field": "shopName" }, { "field": "fnsku" }, { "field": "msku" } ] }
+          },
+          {
+            "key": "productInfo",
+            "label": { "zh": "第三方仓产品信息", "en": "Product Info" },
+            "width": "22%",
+            "cell": {
+              "kind": "list",
+              "listField": "skuItemList",
+              "lines": [
+                { "label": { "zh": "三方仓SKU:", "en": "Third-party SKU:" }, "field": "thirdSkuCode" },
+                { "label": { "zh": "三方仓品名:", "en": "Third-party Name:" }, "field": "thirdSkuName" },
+                { "label": { "zh": "三方仓ID:", "en": "Third-party ID:" }, "field": "thirdSkuId" }
+              ]
+            }
+          },
+          { "key": "qtyOut", "label": { "zh": "出库数量", "en": "Qty Out" }, "width": "8%", "cell": { "kind": "text", "field": "outStockQty" } },
+          { "key": "packedQty", "label": { "zh": "装箱数量", "en": "Packed Qty" }, "width": "7%", "cell": { "kind": "text", "field": "packingQuantity" } },
+          {
+            "key": "outboundLocation",
+            "label": { "zh": "出库仓位（数量）", "en": "Outbound Location (Qty)" },
+            "width": "14%",
+            "cell": { "kind": "list", "listField": "goodWarehousePositions", "lines": [ { "text": "{warehousePositionName} ({qty})" } ] }
+          }
+        ]
+      }
+    ]
+  }
+}
